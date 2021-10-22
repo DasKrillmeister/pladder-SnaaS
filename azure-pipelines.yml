@@ -22,10 +22,17 @@ stages:
     - task: Docker@2
       inputs:
         containerRegistry: 'docker-hub'
-        command: 'login'
+        repository: 'pladder-snaas'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        arguments: '--format docker' # needed for podman/buildah
+  - job: Push
+    displayName: Push
+    pool: dev.krillmeister.se
+    steps:
     - task: Docker@2
       inputs:
         containerRegistry: 'docker-hub'
         repository: 'pladder-snaas'
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
+        command: push
+
