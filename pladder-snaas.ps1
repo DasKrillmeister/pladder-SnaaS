@@ -40,7 +40,7 @@ Start-PodeServer -Threads 3 {
     }
 
     $routeGetTtd = Add-PodeRoute -PassThru -Method Get -Path '/ttd' -ScriptBlock {
-        $reposonse = Invoke-RestMethod -Uri $using:uri -Method Post -Headers $using:headers -Body "ttd"
+        $response = Invoke-RestMethod -Uri $using:uri -Method Post -Headers $using:headers -Body "ttd"
         Write-PodeTextResponse -Value $response
     }
 
