@@ -63,6 +63,8 @@ stages:
         azureSubscription: 'Azure subscription 1(5002b0f3-0d3a-4335-9fb8-3d9f593e4e47)'
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
-        inlineScript: 'az pipelines variable-group variable update --organization https://dev.azure.com/krillmeister/ --project pladder-SnaaS --group-id 1 --name buildid --value $(tag)'
+        inlineScript: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          az pipelines variable-group variable update --organization https://dev.azure.com/krillmeister/ --project pladder-SnaaS --group-id 1 --name buildid --value $(tag)
       env:
         AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
