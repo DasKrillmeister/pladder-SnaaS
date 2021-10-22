@@ -6,8 +6,8 @@ services:
     networks:
       - traefik_service
     environment:
-      - "uri=${STAGING-URI}"
-      - "token=${STAGING-TOKEN}"
+      - "uri=STAGING-URI"
+      - "token=STAGING-TOKEN"
       - "port=8081"
     labels:
       - "traefik.http.routers.snaas-staging.rule=Host(`snaas-staging.ext.krillmeister.se`)"
