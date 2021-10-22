@@ -1,0 +1,12 @@
+name: CI
+
+jobs:
+    build:
+        name: Call Azure Pipeline
+        steps:
+        - name: Azure Pipelines Action
+          uses: Azure/pipelines@v1
+          with:
+            azure-devops-project-url: https://dev.azure.com/krillmeister/pladder-SnaaS
+            azure-pipeline-name: 'deploy-prod'
+            azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
