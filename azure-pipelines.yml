@@ -31,4 +31,18 @@ stages:
         containerRegistry: 'docker-hub'
         repository: 'krillmeister/pladder-snaas'
         command: push
-
+- stage: staging
+  displayName: Deploy to staging
+  jobs:
+  - job: deploy
+    displayName: deploy
+    pool: docker.krillmeister.se
+    steps:
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: sudo docker-compose -f pipeline/docker-compose.staging.yml up -d
+      env:
+        BUILDID: $(tag)
+        STAGING-URI: $(staging-uri)
+        STAGING-TOKEN: $(staging-token)
