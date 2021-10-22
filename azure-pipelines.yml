@@ -43,6 +43,5 @@ stages:
         targetType: 'inline'
         script: sudo docker-compose -f pipeline/docker-compose.staging.yml up -d
       env:
-        BUILDID: $(tag)
         STAGING-URI: $(staging-uri)
         STAGING-TOKEN: $(staging-token)
