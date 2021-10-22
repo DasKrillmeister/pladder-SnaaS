@@ -43,4 +43,4 @@ https://snaas-staging.ext.krillmeister.se/
 
 ## Prod
 
-Todo
+Run the github action to deploy to prod
