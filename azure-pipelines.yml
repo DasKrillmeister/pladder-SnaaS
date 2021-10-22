@@ -61,7 +61,7 @@ stages:
       displayName: Update build id variable
       inputs:
         azureSubscription: 'Azure subscription 1(5002b0f3-0d3a-4335-9fb8-3d9f593e4e47)'
-        scriptType: 'pscore'
+        scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: 'az pipelines variable-group variable update --organization https://dev.azure.com/krillmeister/ --project pladder-SnaaS --group-id 1 --name buildid --value $(tag)'
         useGlobalConfig: true
