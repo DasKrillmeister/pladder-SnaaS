@@ -46,12 +46,12 @@ stages:
         script: |
           $data = Get-Content ./pipeline/docker-compose.staging.yml -Raw
           $data = $data -replace 'BUILDID',$env:TAG
-          $data = $data -replace 'STAGING-URI',$env:STAGING-URI
-          $data = $data -replace 'STAGING-TOKEN',$env:STAGING-TOKEN
+          $data = $data -replace 'STAGINGURI',$env:STAGINGURI
+          $data = $data -replace 'STAGINGTOKEN',$env:STAGINGTOKEN
           $data | Set-Content ./pipeline/docker-compose.staging.yml
       env:
-        STAGING-URI: $(staging-uri)
-        STAGING-TOKEN: $(staging-token)
+        STAGINGURI: $(staging-uri)
+        STAGINGTOKEN: $(staging-token)
     - task: Bash@3
       displayName: Deploy docker-compose
       inputs:
