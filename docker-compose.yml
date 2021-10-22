@@ -1,20 +1,12 @@
+# For development use
 version: "3"
 services:
   snaas:
     restart: always
     build:
       context: "."
-    networks:
-      - traefik_service
+    ports:
+      - "8080:8080"
     environment:
       - "uri=https://pladder.example/api/run-command"
       - "token=ABC123"
-    labels:
-      - "traefik.http.routers.snaas.rule=Host(`snaas.fqdn.example.com`)"
-      - "traefik.http.services.snaas.loadbalancer.server.port=8080"
-      - "traefik.docker.network=traefik_service"
-      - "traefik.http.services.snaas.loadbalancer.server.scheme=http"
-      - "traefik.http.routers.snaas.entrypoints=web"
-networks:
-  traefik_service:
-    external: true

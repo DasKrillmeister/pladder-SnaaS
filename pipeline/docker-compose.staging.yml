@@ -1,0 +1,20 @@
+version: "3"
+services:
+  snaas-staging:
+    restart: always
+    image: krillmeister/pladder-snaas:build-id
+    networks:
+      - traefik_service
+    environment:
+      - "uri=staging-uri"
+      - "token=staging-token"
+      - "port=8081"
+    labels:
+      - "traefik.http.routers.snaas-staging.rule=Host(`snaas-staging.ext.krillmeister.se`)"
+      - "traefik.http.services.snaas-staging.loadbalancer.server.port=8081"
+      - "traefik.docker.network=traefik_service"
+      - "traefik.http.services.snaas-staging.loadbalancer.server.scheme=http"
+      - "traefik.http.routers.snaas-staging.entrypoints=web"
+networks:
+  traefik_service:
+    external: true
