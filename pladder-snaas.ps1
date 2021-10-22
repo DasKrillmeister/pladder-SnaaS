@@ -21,14 +21,14 @@ Function Initialize-PodeSettings() {
 
 
 Start-PodeServer -Threads 3 {
-    
+
     Initialize-PodeSettings
 
     $routePostSnuska = Add-PodeRoute -PassThru -Method Post -Path '/snuska' -ContentType 'text/plain' -ScriptBlock {
         $data = $WebEvent.Data | Out-String
         $data = $data -replace '{|\[|\]|}|\$', ''
         $data = ($data[0..100] -join "").trim()
-        
+
         $response = Invoke-RestMethod -Uri $using:uri -Method Post -Headers $using:headers -Body "snuska $data"
         Write-PodeTextResponse -Value $response
     }
@@ -38,7 +38,12 @@ Start-PodeServer -Threads 3 {
         $response = Invoke-RestMethod -Uri $using:uri -Method Post -Headers $using:headers -Body "snusk"
         Write-PodeTextResponse -Value $response
     }
-    
+
+    $routeGetTtd = Add-PodeRoute -PassThru -Method Get -Path '/ttd' -ScriptBlock {
+        $reposonse = Invoke-RestMethod -Uri $using:uri -Method Post -Headers $using:headers -Body "ttd"
+        Write-PodeTextResponse -Value $response
+    }
+
     # OpenAPI Stuff
     Enable-PodeOpenApi -Title "pladder-SnaaS" -Version 1.0 -Path /openapi
     Enable-PodeOpenApiViewer -Type Swagger -Path / -OpenApiUrl /openapi
@@ -47,4 +52,6 @@ Start-PodeServer -Threads 3 {
 
     Set-PodeOARequest -Route $routePostSnuska -RequestBody (New-PodeOARequestBody -ContentSchemas @{ 'text/plain' = (New-PodeOAStringProperty -Name 'target' -MinLength 1 -MaxLength 100) })
     Set-PodeOARouteInfo -Route $routePostSnuska -Summary "Returns a freshly minted targeted snusk from strutern"
+
+    Set-PodeOARouteInfo -Route $routeGetTtd -Summary "Returns a freshly minted OpenTTD-style Swedish town name"
 }
