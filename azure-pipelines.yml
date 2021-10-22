@@ -57,3 +57,11 @@ stages:
       inputs:
         targetType: 'inline'
         script: sudo docker-compose -f pipeline/docker-compose.staging.yml up -d
+    - task: AzureCLI@2
+      displayName: Update build id variable
+      inputs:
+        azureSubscription: 'Azure subscription 1(5002b0f3-0d3a-4335-9fb8-3d9f593e4e47)'
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'az pipelines variable-group variable update --organization https://dev.azure.com/krillmeister/ --project pladder-SnaaS --group-id 1 --name buildid --value $(tag)'
+        useGlobalConfig: true
