@@ -1,0 +1,66 @@
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool: dev.krillmeister.se
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'docker-hub'
+        repository: 'krillmeister/pladder-snaas'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        arguments: '--format docker' # needed for podman/buildah
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'docker-hub'
+        repository: 'krillmeister/pladder-snaas'
+        command: push
+- stage: staging
+  displayName: Deploy to staging
+  jobs:
+  - job: deploy
+    displayName: deploy
+    pool: docker.krillmeister.se
+    steps:
+    - task: PowerShell@2
+      displayName: Inject secrets
+      inputs:
+        targetType: inline
+        pwsh: true
+        script: |
+          $data = Get-Content ./pipeline/docker-compose.staging.yml -Raw
+          $data = $data -replace 'BUILDID',$env:TAG
+          $data = $data -replace 'STAGINGURI',$env:STAGINGURI
+          $data = $data -replace 'STAGINGTOKEN',$env:STAGINGTOKEN
+          $data | Set-Content ./pipeline/docker-compose.staging.yml
+      env:
+        STAGINGURI: $(staging-uri)
+        STAGINGTOKEN: $(staging-token)
+    - task: Bash@3
+      displayName: Deploy docker-compose
+      inputs:
+        targetType: 'inline'
+        script: sudo docker-compose -f pipeline/docker-compose.staging.yml up -d
+    - task: AzureCLI@2
+      displayName: Update build id variable
+      inputs:
+        azureSubscription: 'Azure subscription 1(5002b0f3-0d3a-4335-9fb8-3d9f593e4e47)'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          az pipelines variable-group variable update --organization https://dev.azure.com/krillmeister/ --project pladder-SnaaS --group-id 1 --name buildid --value $(tag)
+      env:
+        AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)

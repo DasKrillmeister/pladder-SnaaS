@@ -1,0 +1,35 @@
+resources:
+  webhooks:
+    - webhook: deployprod
+      connection: deployprod
+
+variables:
+- group: "Release number"
+
+stages:
+- stage: prod
+  displayName: Deploy to prod
+  jobs:
+  - job: deploy
+    displayName: deploy
+    pool: docker.krillmeister.se
+    steps:
+    - task: PowerShell@2
+      displayName: Inject secrets
+      inputs:
+        targetType: inline
+        pwsh: true
+        script: |
+          $data = Get-Content ./pipeline/docker-compose.prod.yml -Raw
+          $data = $data -replace 'BUILDID',$env:BUILDID
+          $data = $data -replace 'PRODURI',$env:PRODURI
+          $data = $data -replace 'PRODTOKEN',$env:PRODTOKEN
+          $data | Set-Content ./pipeline/docker-compose.prod.yml
+      env:
+        PRODURI: $(prod-uri)
+        PRODTOKEN: $(prod-token)
+    - task: Bash@3
+      displayName: Deploy docker-compose
+      inputs:
+        targetType: 'inline'
+        script: sudo docker-compose -f pipeline/docker-compose.prod.yml up -d

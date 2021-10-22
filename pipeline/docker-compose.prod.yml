@@ -1,0 +1,19 @@
+version: "3"
+services:
+  snaas:
+    restart: always
+    image: krillmeister/pladder-snaas:BUILDID
+    networks:
+      - traefik_service
+    environment:
+      - "uri=PRODURI"
+      - "token=PRODTOKEN"
+    labels:
+      - "traefik.http.routers.snaas.rule=Host(`snaas.ext.krillmeister.se`)"
+      - "traefik.http.services.snaas.loadbalancer.server.port=8080"
+      - "traefik.docker.network=traefik_service"
+      - "traefik.http.services.snaas.loadbalancer.server.scheme=http"
+      - "traefik.http.routers.snaas.entrypoints=web"
+networks:
+  traefik_service:
+    external: true
