@@ -2,12 +2,12 @@ version: "3"
 services:
   snaas-staging:
     restart: always
-    image: krillmeister/pladder-snaas:build-id
+    image: krillmeister/pladder-snaas:${BUILD.BUILDID}
     networks:
       - traefik_service
     environment:
-      - "uri=staging-uri"
-      - "token=staging-token"
+      - "uri=${STAGING-URI}"
+      - "token=${STAGING-TOKEN}"
       - "port=8081"
     labels:
       - "traefik.http.routers.snaas-staging.rule=Host(`snaas-staging.ext.krillmeister.se`)"
