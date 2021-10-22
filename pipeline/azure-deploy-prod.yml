@@ -1,7 +1,4 @@
-resources:
-  webhooks:
-    - webhook: deployprod
-      connection: deployprod
+trigger: none
 
 variables:
 - group: "Release number"
