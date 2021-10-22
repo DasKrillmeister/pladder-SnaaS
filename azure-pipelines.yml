@@ -39,14 +39,21 @@ stages:
     pool: docker.krillmeister.se
     steps:
     - task: PowerShell@2
+      displayName: Inject secrets
       inputs:
         targetType: inline
         pwsh: true
-        script: (Get-Content ./pipeline/docker-compose.staging.yml -Raw) -replace 'BUILDID',$env:TAG | Set-Content ./pipeline/docker-compose.staging.yml
-    - task: Bash@3
-      inputs:
-        targetType: 'inline'
-        script: sudo docker-compose -f pipeline/docker-compose.staging.yml up -d
+        script: |
+          $data = Get-Content ./pipeline/docker-compose.staging.yml -Raw
+          $data = $data -replace 'BUILDID',$env:TAG
+          $data = $data -replace 'STAGING-URI',$env:STAGING-URI
+          $data = $data -replace 'STAGING-TOKEN',$env:STAGING-TOKEN
+          $data | Set-Content ./pipeline/docker-compose.staging.yml
       env:
         STAGING-URI: $(staging-uri)
         STAGING-TOKEN: $(staging-token)
+    - task: Bash@3
+      displayName: Deploy docker-compose
+      inputs:
+        targetType: 'inline'
+        script: sudo docker-compose -f pipeline/docker-compose.staging.yml up -d
