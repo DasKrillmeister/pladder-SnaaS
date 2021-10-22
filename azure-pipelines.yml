@@ -65,3 +65,5 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: 'az pipelines variable-group variable update --organization https://dev.azure.com/krillmeister/ --project pladder-SnaaS --group-id 1 --name buildid --value $(tag)'
         useGlobalConfig: true
+      env:
+        AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
