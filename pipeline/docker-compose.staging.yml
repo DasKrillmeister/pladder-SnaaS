@@ -2,7 +2,7 @@ version: "3"
 services:
   snaas-staging:
     restart: always
-    image: krillmeister/pladder-snaas:${BUILDID}
+    image: krillmeister/pladder-snaas:${TAG}
     networks:
       - traefik_service
     environment:
