@@ -35,7 +35,7 @@ connect to localhost:8080
 The main branch is automatically built and deployed via Azure Devops to a staging environment.
 
 Status:
-[![Build Status](https://dev.azure.com/krillmeister/pladder-SnaaS/_apis/build/status/DasKrillmeister.pladder-SnaaS?branchName=main)](https://dev.azure.com/krillmeister/pladder-SnaaS/_build/latest?definitionId=1&branchName=main)
+[![Build Status](https://dev.azure.com/krillmeister/pladder-SnaaS/_apis/build/status/build-deploy-staging?branchName=main)](https://dev.azure.com/krillmeister/pladder-SnaaS/_build/latest?definitionId=2&branchName=main)
 
 Staging can be accessed here:
 https://snaas-staging.ext.krillmeister.se/
@@ -43,4 +43,10 @@ https://snaas-staging.ext.krillmeister.se/
 
 ## Prod
 
-Run the github action to deploy to prod
+Run the github action on this repo to deploy staging --> prod.
+
+Check the status here:
+[![Build Status](https://dev.azure.com/krillmeister/pladder-SnaaS/_apis/build/status/deploy-prod?branchName=main)](https://dev.azure.com/krillmeister/pladder-SnaaS/_build/latest?definitionId=3&branchName=main)
+
+Access prod at:
+https://snaas.ext.krillmeister.se/
