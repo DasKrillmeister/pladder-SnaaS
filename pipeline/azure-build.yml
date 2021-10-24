@@ -6,7 +6,7 @@ resources:
 
 variables:
   tag: '$(Build.BuildId)'
-  version: '$(Build.SourceVersion'
+  version: '$(Build.SourceVersion)'
 
 stages:
 - stage: Build
