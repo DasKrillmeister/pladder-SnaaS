@@ -29,7 +29,7 @@ Start-PodeServer -Threads 3 {
         $data = $data -replace '{|\[|\]|}|\$', ''
         $data = ($data[0..100] -join "").trim()
 
-        $response = Invoke-RestMethod -Uri $using:uri -Method Post -Headers $using:headers -Body "snuska $data"
+        $response = Invoke-RestMethod -Uri $using:uri -Method Post -Headers $using:headers -Body "snuska {$data}"
         Write-PodeTextResponse -Value $response
     }
 
