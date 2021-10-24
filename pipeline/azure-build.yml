@@ -21,7 +21,7 @@ stages:
       inputs:
         targetType: inline
         pwsh: true
-        script: $env:TAG | Set-Content ./version
+        script: $env:VERSION | Set-Content ./version
     - task: Docker@2
       inputs:
         containerRegistry: 'docker-hub'
