@@ -9,6 +9,12 @@ $headers = @{
     "Content-Type"    = "text/plain; charset=utf-8"
 }
 
+try {
+    $version = Get-Content version -Erroraction Stop
+} catch {
+    $version = "Unknown"
+}
+
 Function Initialize-PodeSettings() {
     Add-PodeEndpoint -Port $port -Protocol Http -Address $address
 
@@ -45,8 +51,8 @@ Start-PodeServer -Threads 3 {
     }
 
     # OpenAPI Stuff
-    Enable-PodeOpenApi -Title "pladder-SnaaS" -Version 1.0 -Path /openapi
-    Enable-PodeOpenApiViewer -Type Swagger -Path / -OpenApiUrl /openapi
+    Enable-PodeOpenApi -Title "pladder-SnaaS" -Version $version -Path /openapi
+    Enable-PodeOpenApiViewer -Type Swagger -Path / -OpenApiUrl /openapi -DarkMode
 
     Set-PodeOARouteInfo -Route $routeGetSnusk -Summary "Returns a freshly minted snusk from strutern"
 
