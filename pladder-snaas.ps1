@@ -52,7 +52,7 @@ Start-PodeServer -Threads 3 {
 
     $routeGetKackers = Add-PodeRoute -PassThru -Method Get -Path '/kackers' -ScriptBlock {
         $response = Invoke-RestMethod -Uri $using:uri -Method Post -Headers $using:headers -Body "get-cell kackers"
-        Write-PodeTextResponse -Value "kackers $response"
+        Write-PodeTextResponse -Value "kackers $response`n"
     }
 
     # OpenAPI Stuff
