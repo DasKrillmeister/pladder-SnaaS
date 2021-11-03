@@ -50,6 +50,11 @@ Start-PodeServer -Threads 3 {
         Write-PodeTextResponse -Value $response
     }
 
+    $routeGetKackers = Add-PodeRoute -PassThru -Method Get -Path '/kackers' -ScriptBlock {
+        $response = Invoke-RestMethod -Uri $using:uri -Method Post -Headers $using:headers -Body "get-cell kackers"
+        Write-PodeTextResponse -Value "kackers $response"
+    }
+
     # OpenAPI Stuff
     Enable-PodeOpenApi -Title "pladder-SnaaS" -Version $version -Path /openapi
     Enable-PodeOpenApiViewer -Type Swagger -Path / -OpenApiUrl /openapi -DarkMode
@@ -60,4 +65,6 @@ Start-PodeServer -Threads 3 {
     Set-PodeOARouteInfo -Route $routePostSnuska -Summary "Returns a freshly minted targeted snusk from strutern"
 
     Set-PodeOARouteInfo -Route $routeGetTtd -Summary "Returns a freshly minted OpenTTD-style Swedish town name"
+
+    Set-PodeOARouteInfo -Route $routeGetKackers -Summary "Returns current value of ~kack"
 }
